@@ -38,6 +38,7 @@ import {
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
+import ProtectedRoute from "./hooks/protectedRoute";
 
 function App() {
   return (
@@ -103,9 +104,26 @@ function App() {
                       element={<NavigateToResource resource="blog_posts" />}
                     />
                     <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
+                      <Route index element={
+                        <ProtectedRoute requiredPermissions={["READ_ONLY"]}>
+                          <BlogPostList />
+                        </ProtectedRoute>
+                      
+                    
+                     }  />
+                      <Route path="create" element={
+                        <ProtectedRoute requiredPermissions={["READ_WRITE"]}>
+                            <BlogPostCreate />
+                      </ProtectedRoute>
+                        
+                        } />
+                      <Route path="edit/:id" element=
+                      {
+                        <ProtectedRoute requiredPermissions={["ADMIN"]}>
+                           <BlogPostEdit />
+                      </ProtectedRoute>
+                              
+                      } />
                       <Route path="show/:id" element={<BlogPostShow />} />
                     </Route>
                     <Route path="/categories">
