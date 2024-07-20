@@ -39,6 +39,7 @@ import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import ProtectedRoute from "./hooks/protectedRoute";
+import { CustomSider } from "./components/sider";
 
 function App() {
   return (
@@ -62,7 +63,9 @@ function App() {
                     show: "/blog-posts/show/:id",
                     meta: {
                       canDelete: true,
+                      options: {resriced : true, rights :"READ_ONLY"}
                     },
+                    
                   },
                   {
                     name: "categories",
@@ -90,18 +93,23 @@ function App() {
                         key="authenticated-inner"
                         fallback={<CatchAllNavigate to="/login" />}
                       >
-                        <ThemedLayoutV2
-                          Header={Header}
-                          Sider={(props) => <ThemedSiderV2 {...props} fixed />}
-                        >
-                          <Outlet />
-                        </ThemedLayoutV2>
+                       
+                                    <ThemedLayoutV2 Sider={CustomSider}>
+                                        <Outlet />
+                                    </ThemedLayoutV2>
+                                
                       </Authenticated>
                     }
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="blog_posts" />}
+                      element={
+                        <ProtectedRoute requiredPermissions={["READ_ONLY"]}>
+                          <NavigateToResource resource="blog_posts" />
+                        </ProtectedRoute>
+                     
+                    
+                    }
                     />
                     <Route path="/blog-posts">
                       <Route index element={
