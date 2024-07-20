@@ -1,18 +1,12 @@
-import React, { ReactNode, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePermissions } from "@refinedev/core";
 import { notification } from "antd";
+import { ProtectedRouteProps } from "../models/ProtectedRouteProps";
+import { Permission } from "../models/Permission";
 
-interface ProtectedRouteProps {
-    children: ReactNode;
-    requiredPermissions?: string[];
-}
 
-interface Permission {
-    authority: string
-}
 
-type Permissions = string[];
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredPermissions = [] }) => {
     const { data: permissions, isLoading } = usePermissions<Permission[]>();
